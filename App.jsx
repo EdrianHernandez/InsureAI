@@ -3,15 +3,14 @@ import { Header } from './components/Layout';
 import { FormWizard } from './components/FormWizard';
 import { ResultsDashboard } from './components/ResultsDashboard';
 import { generateQuotes } from './services/geminiService';
-import { UserData, QuoteResult } from './types';
 import { Shield, Lock } from 'lucide-react';
 
-const App: React.FC = () => {
+const App = () => {
   const [loading, setLoading] = useState(false);
-  const [quoteResult, setQuoteResult] = useState<QuoteResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [quoteResult, setQuoteResult] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleFormComplete = async (data: UserData) => {
+  const handleFormComplete = async (data) => {
     setLoading(true);
     setError(null);
     try {
