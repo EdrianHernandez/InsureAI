@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Menu, X } from 'lucide-react';
 
-export const Header: React.FC = () => {
+export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   return (
