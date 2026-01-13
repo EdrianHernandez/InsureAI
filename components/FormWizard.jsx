@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import { UserData, InsuranceType } from '../types';
+import { InsuranceType } from '../types';
 import { Car, Home, Heart, ArrowRight, ArrowLeft, Check } from 'lucide-react';
-
-interface FormWizardProps {
-  onComplete: (data: UserData) => void;
-  isLoading: boolean;
-}
 
 const STEPS = [
   { id: 'type', title: 'Coverage Type', description: 'What do you need to protect?' },
@@ -14,16 +9,16 @@ const STEPS = [
   { id: 'review', title: 'Review', description: 'Confirm your details.' }
 ];
 
-export const FormWizard: React.FC<FormWizardProps> = ({ onComplete, isLoading }) => {
+export const FormWizard = ({ onComplete, isLoading }) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState<UserData>({
+  const [formData, setFormData] = useState({
     insuranceType: InsuranceType.AUTO,
     age: 30,
     zipCode: '',
     gender: 'Prefer not to say',
   });
 
-  const updateData = (key: keyof UserData, value: any) => {
+  const updateData = (key, value) => {
     setFormData(prev => ({ ...prev, [key]: value }));
   };
 
