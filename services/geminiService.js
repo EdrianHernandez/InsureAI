@@ -1,9 +1,8 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { UserData, QuoteResult } from "../types";
+import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-export const generateQuotes = async (userData: UserData): Promise<QuoteResult> => {
+export const generateQuotes = async (userData) => {
   const model = "gemini-3-flash-preview";
 
   const systemInstruction = `
@@ -30,37 +29,37 @@ export const generateQuotes = async (userData: UserData): Promise<QuoteResult> =
         systemInstruction,
         responseMimeType: "application/json",
         responseSchema: {
-          type: Type.OBJECT,
+          type: "object",
           properties: {
             packages: {
-              type: Type.ARRAY,
+              type: "array",
               items: {
-                type: Type.OBJECT,
+                type: "object",
                 properties: {
-                  name: { type: Type.STRING, description: "e.g., Basic Liability, Comprehensive Gold" },
-                  monthlyPremium: { type: Type.NUMBER },
-                  coverageLimit: { type: Type.STRING, description: "e.g., $50,000 / $100,000" },
-                  deductible: { type: Type.STRING, description: "e.g., $500" },
-                  features: { type: Type.ARRAY, items: { type: Type.STRING } },
-                  recommendationScore: { type: Type.NUMBER, description: "0 to 100 based on fit for user" },
-                  aiAnalysis: { type: Type.STRING, description: "Short sentence on why this package fits." }
+                  name: { type: "string", description: "e.g., Basic Liability, Comprehensive Gold" },
+                  monthlyPremium: { type: "number" },
+                  coverageLimit: { type: "string", description: "e.g., $50,000 / $100,000" },
+                  deductible: { type: "string", description: "e.g., $500" },
+                  features: { type: "array", items: { type: "string" } },
+                  recommendationScore: { type: "number", description: "0 to 100 based on fit for user" },
+                  aiAnalysis: { type: "string", description: "Short sentence on why this package fits." }
                 },
                 required: ["name", "monthlyPremium", "coverageLimit", "deductible", "features", "recommendationScore", "aiAnalysis"]
               }
             },
             analysis: {
-              type: Type.OBJECT,
+              type: "object",
               properties: {
-                riskLevel: { type: Type.STRING, enum: ["Low", "Moderate", "High"] },
-                score: { type: Type.NUMBER, description: "0-100 safety score" },
+                riskLevel: { type: "string", enum: ["Low", "Moderate", "High"] },
+                score: { type: "number", description: "0-100 safety score" },
                 factors: {
-                  type: Type.ARRAY,
+                  type: "array",
                   items: {
-                    type: Type.OBJECT,
+                    type: "object",
                     properties: {
-                      name: { type: Type.STRING },
-                      impact: { type: Type.STRING, enum: ["Positive", "Negative"] },
-                      description: { type: Type.STRING }
+                      name: { type: "string" },
+                      impact: { type: "string", enum: ["Positive", "Negative"] },
+                      description: { type: "string" }
                     },
                     required: ["name", "impact", "description"]
                   }
@@ -77,7 +76,7 @@ export const generateQuotes = async (userData: UserData): Promise<QuoteResult> =
     const text = response.text;
     if (!text) throw new Error("No response from Gemini");
     
-    return JSON.parse(text) as QuoteResult;
+    return JSON.parse(text);
 
   } catch (error) {
     console.error("Gemini Quote Generation Error:", error);
