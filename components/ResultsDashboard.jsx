@@ -1,14 +1,8 @@
 import React from 'react';
-import { QuoteResult } from '../types';
 import { Check, ShieldAlert, Zap, TrendingUp, Info } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
-interface ResultsDashboardProps {
-  result: QuoteResult;
-  onReset: () => void;
-}
-
-export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, onReset }) => {
+export const ResultsDashboard = ({ result, onReset }) => {
   const { packages, analysis } = result;
 
   // Data for chart
@@ -18,7 +12,7 @@ export const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, onRe
     score: pkg.recommendationScore
   }));
 
-  const getRiskColor = (level: string) => {
+  const getRiskColor = (level) => {
     switch (level) {
       case 'Low': return 'text-green-600 bg-green-50 border-green-200';
       case 'Moderate': return 'text-amber-600 bg-amber-50 border-amber-200';
