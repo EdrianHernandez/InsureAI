@@ -1,0 +1,5 @@
+{
+  "name": "InsureAI - Intelligent Quote Tool",
+  "description": "A next-generation insurance quote application powered by Gemini. Get personalized, AI-analyzed insurance packages for Auto, Home, and Life insurance in seconds with visual data breakdowns and risk assessment.",
+  "requestFramePermissions": []
+}
