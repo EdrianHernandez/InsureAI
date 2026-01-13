@@ -1,8 +1,15 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-
+// Removed top-level initialization to ensure process.env is populated
 export const generateQuotes = async (userData) => {
+  // Initialize inside the function to ensure the vite 'define' values are ready
+  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+  
+  if (!apiKey || apiKey === 'PLACEHOLDER_API_KEY') {
+    throw new Error("Gemini API Key is not set. Please check your .env.local file.");
+  }
+
+  const ai = new GoogleGenAI(apiKey);
   const model = "gemini-3-flash-preview";
 
   const systemInstruction = `
@@ -17,7 +24,7 @@ export const generateQuotes = async (userData) => {
     ${JSON.stringify(userData, null, 2)}
 
     For the 'riskLevel', choose from 'Low', 'Moderate', or 'High'.
-    For 'factors', explain why the premium is what it is (e.g., 'New car safety features', 'Young driver risk', 'High property value').
+    For 'factors', explain why the premium is what it is.
     Currency should be in USD.
   `;
 
@@ -36,13 +43,13 @@ export const generateQuotes = async (userData) => {
               items: {
                 type: "object",
                 properties: {
-                  name: { type: "string", description: "e.g., Basic Liability, Comprehensive Gold" },
+                  name: { type: "string" },
                   monthlyPremium: { type: "number" },
-                  coverageLimit: { type: "string", description: "e.g., $50,000 / $100,000" },
-                  deductible: { type: "string", description: "e.g., $500" },
+                  coverageLimit: { type: "string" },
+                  deductible: { type: "string" },
                   features: { type: "array", items: { type: "string" } },
-                  recommendationScore: { type: "number", description: "0 to 100 based on fit for user" },
-                  aiAnalysis: { type: "string", description: "Short sentence on why this package fits." }
+                  recommendationScore: { type: "number" },
+                  aiAnalysis: { type: "string" }
                 },
                 required: ["name", "monthlyPremium", "coverageLimit", "deductible", "features", "recommendationScore", "aiAnalysis"]
               }
@@ -51,7 +58,7 @@ export const generateQuotes = async (userData) => {
               type: "object",
               properties: {
                 riskLevel: { type: "string", enum: ["Low", "Moderate", "High"] },
-                score: { type: "number", description: "0-100 safety score" },
+                score: { type: "number" },
                 factors: {
                   type: "array",
                   items: {
